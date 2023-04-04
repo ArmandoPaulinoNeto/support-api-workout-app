@@ -96,7 +96,9 @@ export class PupilRepository{
                                                 .select("*")
                                                 .from("pupil", "p")
                                                 .groupBy("p.id")
-                                                .getCount();
+                                                .addSelect("COUNT(*)", "c")
+                                                .getRawMany();
+
         
         const notice = await AppDataSource.createQueryBuilder()
                                             .select("*")
