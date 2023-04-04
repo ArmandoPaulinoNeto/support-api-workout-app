@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class RecoverUser{
+export class RecoverIdToken{
 
     constructor(private jwtService: JwtService){}
     recoverUserIdByAccessToken(req: Request) {

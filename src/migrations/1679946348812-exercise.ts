@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from "typeorm"
 
-export class accessProfile1676743254030 implements MigrationInterface {
+export class exercise1679946348812 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "access_profile",
+                    name: "exercise",
                     columns: [
                         {
                             name: "id",
@@ -14,12 +14,18 @@ export class accessProfile1676743254030 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "role",
+                            name: "name",
                             type: "varchar",
-                            isNullable: false,
-                            length: "10",
-                            default: "user"
+                            length: "100",
+                            isNullable: false
+                        },
+                        {
+                            name: "muscle_group",
+                            type: "varchar",
+                            length: "15",
+                            isNullable: false
                         }
+
                     ]
                 }
             ),
@@ -28,7 +34,7 @@ export class accessProfile1676743254030 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("access_profile", true);
+        await queryRunner.dropTable("exercise");
     }
 
 }

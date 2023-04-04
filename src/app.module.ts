@@ -4,6 +4,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { SignupModule } from './controllers/signup/signup.module';
 import { AuthModule } from './controllers/auth/auth.module';
+import { SigninModule } from './controllers/signin/signin.module';
+import { AdministratorController } from './controllers/administrator/administrator.controller';
+import { AdministratorService } from './services/administrator/administrator.service';
+import { AdministratorRepository } from './repositories/administrator.repository';
+import { AdministratorModule } from './controllers/administrator/administrator.module';
+import { RecoverIdToken } from './controllers/auth/autenticate/recover-id-token';
+import { JwtService } from '@nestjs/jwt';
+import { PupilRepository } from './repositories/pupil.repository';
+import { SigninController } from './controllers/signin/signin.controller';
+import { SigninService } from './services/signin/signin.service';
+import { AccessRepository } from './repositories/access.repository';
+import { AccessTokenGenerator } from './controllers/auth/autenticate/access-token-generator';
+import { EncriptorBcrypt } from './util/encriptor-bcrypt';
 
 @Module({
   imports: [
@@ -12,7 +25,9 @@ import { AuthModule } from './controllers/auth/auth.module';
       imports: [
         ConfigModule,
         AuthModule,
-        SignupModule
+        SignupModule,
+        SigninModule,
+        AdministratorModule
       ],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
@@ -34,5 +49,17 @@ import { AuthModule } from './controllers/auth/auth.module';
     })
 
   ],
+  providers: [
+    AdministratorService,
+    AdministratorRepository,
+    PupilRepository,
+    AccessRepository,
+    AccessTokenGenerator,
+    EncriptorBcrypt,
+    SigninService,
+    RecoverIdToken,
+    JwtService
+  ],
+  controllers: [AdministratorController, SigninController, SigninController],
 })
 export class AppModule {}

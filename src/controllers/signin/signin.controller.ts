@@ -3,24 +3,23 @@ import { JwtGuard } from 'src/controllers/auth/jwt.guard';
 import { RoleUserGuard } from 'src/controllers/auth/role-user/role-user.guard';
 import { Role } from 'src/controllers/auth/role.decorator';
 import { SigninAuthDto } from 'src/dtos/signin-auth.dto';
+import { SigninService } from 'src/services/signin/signin.service';
 
 @Controller('signin/')
 export class SigninController {
     
-    constructor() {}
-
-    @Post('consult')
-    signin(@Body() signinAuthDto:SigninAuthDto){
-
-        //return {token: this.autenticateService.signinAuth(signinAuthDto)};
+    constructor(private signinService: SigninService) {}
+    
+    @Post('access')
+    async signin(@Body() signinAuthDto: SigninAuthDto){
+        
+        return { token: await this.signinService.signinPerson(signinAuthDto) };
     }
 
-    @Role('admin')
+    @Role('user')
     @UseGuards(JwtGuard, RoleUserGuard)
-    @Get('find')
-    getUser(@Body() credentials){
-
-        const id = credentials.id;
-        //return this.autenticateService.findById(id);
+    @Get('get-user')
+    getUser(@Body() userId){        
+        return this.signinService.getUserById(userId);
     }
 }

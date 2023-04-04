@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MembershipRepository } from 'src/repositories/membership.repository';
-import { UserRepository } from 'src/repositories/user.repository';
+import { AccessRepository } from 'src/repositories/access.repository';
+import { PupilRepository } from 'src/repositories/pupil.repository';
 import { SignupService } from 'src/services/signup/signup.service';
+import { EncriptorBcrypt } from 'src/util/encriptor-bcrypt';
 import { SignupController } from '../signup/signup.controller';
 import { AccessTokenGenerator } from './autenticate/access-token-generator';
-import { RecoverUser } from './autenticate/recover-user-id';
+import { RecoverIdToken } from './autenticate/recover-id-token';
 import { JwtStrategyService } from './jwt-strategy/jwt-strategy.service';
 require('dotenv/config');
 
@@ -21,17 +22,18 @@ require('dotenv/config');
       },
       
     ),
-    TypeOrmModule.forFeature([MembershipRepository])
+    //TypeOrmModule.forFeature([MembershipRepository])
   ],
   controllers: [SignupController],
   providers: [
     JwtService,
     SignupService,
-    UserRepository,
-    MembershipRepository,
+    PupilRepository,
     AccessTokenGenerator,
+    AccessRepository,
+    EncriptorBcrypt,
     JwtStrategyService,
-    RecoverUser
+    RecoverIdToken
   ]
 })
 export class AuthModule {}

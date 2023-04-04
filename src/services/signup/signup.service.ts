@@ -1,21 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { SignupAuthDto } from 'src/dtos/signup-auth.dto';
-import { UserDto } from 'src/dtos/user.dto';
-import { MembershipRepository } from 'src/repositories/membership.repository';
-import { UserRepository } from 'src/repositories/user.repository';
+import { AccessDto } from 'src/dtos/access.dto';
+import { PupilDto } from 'src/dtos/pupil.dto';
+import { PupilRepository } from 'src/repositories/pupil.repository';
  
 @Injectable()
 export class SignupService {
-   
-
-    constructor(private userRepository: UserRepository, private membershipRepository:MembershipRepository){}
     
-    signupAuthFirstAccess(signupAuthDto: SignupAuthDto) {
-        return this.membershipRepository.authMembershipByPlateCPF(signupAuthDto);
-    }
+    constructor(private pupilRepository: PupilRepository){}
 
-    createUser(userDto: UserDto){
-
-        return this.userRepository.createUser(userDto);
+    createPupil(pupilDto: PupilDto) {
+        return this.pupilRepository.createPupil(pupilDto)
     }
 }

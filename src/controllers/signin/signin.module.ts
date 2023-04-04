@@ -2,23 +2,21 @@ import { Module } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AccessRepository } from "src/repositories/access.repository";
-import { PupilRepository } from "src/repositories/pupil.repository";
-import { SignupService } from "src/services/signup/signup.service";
+import { SigninService } from "src/services/signin/signin.service";
 import { EncriptorBcrypt } from "src/util/encriptor-bcrypt";
 import { AccessTokenGenerator } from "../auth/autenticate/access-token-generator";
 import { RecoverIdToken } from "../auth/autenticate/recover-id-token";
-import { SignupController } from "./signup.controller";
+import { SigninController } from "./signin.controller";
 
 @Module({
     imports: [
         // TypeOrmModule.forFeature([MembershipRepository])
     ],
     controllers: [
-        SignupController
+        SigninController
     ],
     providers: [
-        SignupService,
-        PupilRepository,
+        SigninService,
         RecoverIdToken,
         AccessRepository,
         AccessTokenGenerator,
@@ -27,4 +25,4 @@ import { SignupController } from "./signup.controller";
     ]
 })
 
-export class SignupModule{}
+export class SigninModule{}

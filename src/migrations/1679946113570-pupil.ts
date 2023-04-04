@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
-export class membership1676745985052 implements MigrationInterface {
+export class pupil1679946113570 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "membership",
+                    name: "pupil",
                     columns: [
                         {
                             name: "id",
@@ -14,48 +14,33 @@ export class membership1676745985052 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "name",
-                            type: "varchar",
-                            length: "45"
-                        },
-                        {
-                            name: "cpf",
-                            type: "varchar",
-                            length: "11"
-                        },
-                        {
-                            name: "address",
+                            name: "goal",
                             type: "varchar",
                             length: "100"
                         },
                         {
-                            name: "plate",
-                            type: "varchar",
-                            length: "25"
-                        },
-                        {
-                            name: "access_profile_fk",
+                            name: "person_fk",
                             type: "uuid"
                         }
-                    ]
+                    ]                    
                 }
             ),
             true
         );
         await queryRunner.createForeignKey(
-            "membership",
+            "pupil",
             new TableForeignKey(
                 {
-                    columnNames: ["access_profile_fk"],
+                    columnNames: ["person_fk"],
                     referencedColumnNames: ["id"],
-                    referencedTableName: "access_profile"
+                    referencedTableName: "person"
                 }
             )
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("membership", true);
+        await queryRunner.dropTable("pupil");
     }
 
 }
