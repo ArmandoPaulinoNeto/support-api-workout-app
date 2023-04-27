@@ -1,26 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { AdministratorDto } from 'src/dtos/administrator.dto';
+import { DataTeacherDto } from 'src/dtos/data-teacher.dto';
+import { ExerciseDto } from 'src/dtos/exercise.dto';
 import { NoticeDto } from 'src/dtos/notice.dto';
-import { ProfessorDto } from 'src/dtos/professor.dto';
-import { PupilDto } from 'src/dtos/pupil.dto';
 import { AdministratorRepository } from 'src/repositories/administrator.repository';
-import { PupilRepository } from 'src/repositories/pupil.repository';
 
 @Injectable()
 export class AdministratorService {
-
-    constructor(private administratorRepository: AdministratorRepository, private pupilRepository: PupilRepository){}
-
-    getDataHome(administratorDto: AdministratorDto){
-        return this.pupilRepository.getDataHome(administratorDto);
+           
+    constructor(private administratorRepository: AdministratorRepository){}
+    
+    createTeacher(dataTeacherDto: DataTeacherDto) {
+        return this.administratorRepository.createTeacher(dataTeacherDto);
     }
-   
+    
+    fetchAllTeacher() {
+        return this.administratorRepository.fetchAllTeacher();
+    }
+    
     createNotice(noticeDto: NoticeDto) {
         return this.administratorRepository.createNotice(noticeDto);
     }
-
-     createProfessor(professorDto: ProfessorDto) {
-        throw new Error('Method not implemented.');
+    
+    createExercise(exerciseDto: ExerciseDto) {
+        return this.administratorRepository.createExercise(exerciseDto);
+    }
+    
+    fetchAllExercise() {
+        return this.administratorRepository.fetchAllExercise();
     }
     
 }

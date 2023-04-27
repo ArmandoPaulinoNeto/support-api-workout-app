@@ -4,6 +4,6 @@ export class PersonDto{
     id: string;
     name: string;
     birthday: string;
-    gender: string;
+    sex: string;
     access: AccessDto;
 }

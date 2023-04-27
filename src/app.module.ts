@@ -17,6 +17,10 @@ import { SigninService } from './services/signin/signin.service';
 import { AccessRepository } from './repositories/access.repository';
 import { AccessTokenGenerator } from './controllers/auth/autenticate/access-token-generator';
 import { EncriptorBcrypt } from './util/encriptor-bcrypt';
+import { LoadingDataController } from './controllers/loading-data/loading-data.controller';
+import { LoadingDataRepository } from './repositories/loading-data.repository';
+import { PupilController } from './controllers/pupil/pupil.controller';
+import { PupilService } from './services/pupil/pupil.service';
 
 @Module({
   imports: [
@@ -52,14 +56,16 @@ import { EncriptorBcrypt } from './util/encriptor-bcrypt';
   providers: [
     AdministratorService,
     AdministratorRepository,
+    PupilService,
     PupilRepository,
     AccessRepository,
+    LoadingDataRepository,
     AccessTokenGenerator,
     EncriptorBcrypt,
     SigninService,
     RecoverIdToken,
     JwtService
   ],
-  controllers: [AdministratorController, SigninController, SigninController],
+  controllers: [AdministratorController, PupilController,SigninController, SigninController, LoadingDataController],
 })
 export class AppModule {}

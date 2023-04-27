@@ -1,23 +1,20 @@
 import { Injectable } from "@nestjs/common";
 import { AppDataSource } from "src/config/data-source";
-import { AdministratorDto } from "src/dtos/administrator.dto";
-import { PupilDto } from "src/dtos/pupil.dto";
+import { DataPupilDto } from "src/dtos/data-pupil.dto";
 import { Access } from "src/entities/access.entity";
 import { Person } from "src/entities/person.entity";
 import { Profile } from "src/entities/profile.entity";
 import { Pupil } from "src/entities/pupil.entity";
 import { CostumDate } from "src/util/costum-data";
+import { EncriptorBcrypt } from "src/util/encriptor-bcrypt";
 import { v4 } from "uuid";
 
 @Injectable()
 export class PupilRepository{
-
-    async createPupil(pupilDto: PupilDto): Promise<Pupil> {
+    
+    async createPupil(pupilDto: DataPupilDto): Promise<Pupil> {
                       
-        const { goal, person } = pupilDto;
-        const {name, birthday, gender, access } = person;
-        const {email, password, profile } = access;
-        const { photo, role } = profile;
+        const { goal, name, birthday, sex, email, password, photo, role } = pupilDto;
 
 
         const newProfile = new Profile;
@@ -28,14 +25,14 @@ export class PupilRepository{
         const newAccess = new Access();
         newAccess.id = v4();
         newAccess.email = email;
-        newAccess.password = password;
+        newAccess.password = await new EncriptorBcrypt().generatorHash(password);
         newAccess.profile_fk = newProfile.id;
 
         const newPerson = new Person();
         newPerson.id = v4();
         newPerson.name = name;
         newPerson.birthday = new CostumDate().convertToDate(birthday);
-        newPerson.gender = gender;
+        newPerson.sex = sex;
         newPerson.access_fk = newAccess.id;
 
         const newPupil = new Pupil();
@@ -78,41 +75,18 @@ export class PupilRepository{
         catch (error) {
             queryRunner.rollbackTransaction();
             console.log(error);
-            return new Pupil();
+            throw "Erro ao tentar salvar os dados do aluno."
         }        
-    }    
-
-    async getDataHome(administratorDto: AdministratorDto){
-
-        const {id} = administratorDto;
-
-        const administrator = await AppDataSource.createQueryBuilder()
-                                                    .select("*")
-                                                    .from("administrator", "a")
-                                                    .where("a.id = :id", {id: id})
-                                                    .execute();
-
-        const pupilNumber = await AppDataSource.createQueryBuilder()
-                                                .select("*")
-                                                .from("pupil", "p")
-                                                .groupBy("p.id")
-                                                .addSelect("COUNT(*)", "c")
-                                                .getRawMany();
-
-        
-        const notice = await AppDataSource.createQueryBuilder()
-                                            .select("*")
-                                            .from("notice", "n")
-                                            .orderBy("n.id","DESC")
-                                            .getRawOne();
-
-        const count = await this.countPupil(pupilNumber);
-
-        return {administrator, count, notice}                              
     }
 
-    countPupil(pupilNumber){
-        
-        return pupilNumber != null ? pupilNumber.filter(number =>(number.c == "1")).length : 0;
+    fetchAllPupil() {
+        return AppDataSource.createQueryBuilder()
+                            .select("p.id, ps.name, t.name as last_training")
+                            .from("pupil", "p")
+                            .innerJoin("person", "ps","ps.id = p.person_fk")
+                            .leftJoin("schedule", "s", "s.pupil_fk = p.id")
+                            .leftJoin("training_exercise", "te","te.schedule_fk = s.id")
+                            .leftJoin("training","t", "te.training_fk = t.id")
+                            .execute();
     }
 }
