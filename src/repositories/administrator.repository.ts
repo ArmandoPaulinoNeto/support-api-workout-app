@@ -67,17 +67,17 @@ export class AdministratorRepository{
             .execute();
             
             await queryRunner.manager.createQueryBuilder()
-            .insert()
-                                .into("teacher")
-                                .values(newTeacher)
-                                .execute();
-                                
-                                await queryRunner.commitTransaction();
-                                return newTeacher;
-                            } 
-                            catch (error) {
-                                queryRunner.rollbackTransaction();
-                                console.log(error);
+                                    .insert()
+                                    .into("teacher")
+                                    .values(newTeacher)
+                                    .execute();
+                                    
+            await queryRunner.commitTransaction();
+            return newTeacher;
+        } 
+        catch (error) {
+            queryRunner.rollbackTransaction();
+            console.log(error);
             throw "Erro ao tentar salvar os dados do aluno."
         }        
     }
