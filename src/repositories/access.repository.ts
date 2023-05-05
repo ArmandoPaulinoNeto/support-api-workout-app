@@ -52,7 +52,7 @@ export class AccessRepository{
                     var sub = access[0].id;
                     var accessEmail = access[0].email;
                     var role = access[0].role;
-                    var exp = "300s";
+                    var exp = "3600s";
                     
                     return this.accessTokenGenerator.AccessToken(sub, accessEmail, role, exp);
                 }

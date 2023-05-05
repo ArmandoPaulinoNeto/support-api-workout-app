@@ -21,6 +21,8 @@ import { LoadingDataController } from './controllers/loading-data/loading-data.c
 import { LoadingDataRepository } from './repositories/loading-data.repository';
 import { PupilController } from './controllers/pupil/pupil.controller';
 import { PupilService } from './services/pupil/pupil.service';
+import { TrainingRepository } from './repositories/training.repository';
+import { SignupService } from './services/signup/signup.service';
 
 @Module({
   imports: [
@@ -58,11 +60,13 @@ import { PupilService } from './services/pupil/pupil.service';
     AdministratorRepository,
     PupilService,
     PupilRepository,
+    TrainingRepository,
     AccessRepository,
     LoadingDataRepository,
     AccessTokenGenerator,
     EncriptorBcrypt,
     SigninService,
+    SignupService,
     RecoverIdToken,
     JwtService
   ],

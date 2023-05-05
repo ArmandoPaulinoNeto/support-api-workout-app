@@ -8,10 +8,10 @@ import { EncriptorBcrypt } from "src/util/encriptor-bcrypt";
 import { AccessTokenGenerator } from "../auth/autenticate/access-token-generator";
 import { RecoverIdToken } from "../auth/autenticate/recover-id-token";
 import { SignupController } from "./signup.controller";
+import { TrainingRepository } from "src/repositories/training.repository";
 
 @Module({
-    imports: [
-        // TypeOrmModule.forFeature([MembershipRepository])
+    imports: [      
     ],
     controllers: [
         SignupController
@@ -19,6 +19,7 @@ import { SignupController } from "./signup.controller";
     providers: [
         SignupService,
         PupilRepository,
+        TrainingRepository,
         RecoverIdToken,
         AccessRepository,
         AccessTokenGenerator,

@@ -8,6 +8,11 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ extended: true, limit: '50mb' }));
   AppDataSource.initialize();
-  await app.listen(3000);
+
+  var port = process.env.API_ENVIRONMENT == "local"
+              ? process.env.API_PORT_LOCAL 
+              : process.env.API_PORT_CONTAINER;
+  
+  await app.listen(port);
 }
 bootstrap();

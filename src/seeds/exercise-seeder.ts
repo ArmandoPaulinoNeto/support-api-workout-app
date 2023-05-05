@@ -1,4 +1,3 @@
-import { EncriptorBcrypt } from "src/util/encriptor-bcrypt";
 import { DataSource } from "typeorm";
 import { Seeder, SeederFactoryManager } from "typeorm-extension";
 import { v4 } from "uuid";

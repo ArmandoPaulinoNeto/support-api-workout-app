@@ -20,22 +20,29 @@ export class LoadingDataRepository{
                                                 .groupBy("p.id")
                                                 .addSelect("COUNT(*)", "c")
                                                 .getRawMany();
-
+        
+        const teacherNumber = await AppDataSource.createQueryBuilder()
+                                                    .select("*")
+                                                    .from("teacher", "t")
+                                                    .groupBy("t.id")
+                                                    .addSelect("COUNT(*)", "c")
+                                                    .getRawMany();
         
         let notice = await AppDataSource.createQueryBuilder()
-                                            .select("id, title, description, image")
+                                            .select("id, image, status")
                                             .from("notice", "n")
-                                            .orderBy("n.id","DESC")
+                                            .where("n.status = true")
                                             .getRawOne();
                                             
         notice = notice != null? notice : new Notice();
-        const count = await this.countPupil(pupilNumber);
+        const nPupils = await this.countRegisters(pupilNumber);
+        const nTeachers = await this.countRegisters(pupilNumber);
 
-        return {administrator, count, notice}                              
+        return {administrator, nPupils, nTeachers, notice}                              
     }
 
-    countPupil(pupilNumber){
+    countRegisters(nEntity){
         
-        return pupilNumber != null ? pupilNumber.filter(number =>(number.c == "1")).length : 0;
+        return nEntity != null ? nEntity.filter(number =>(number.c == "1")).length : 0;
     }
 }
