@@ -10,6 +10,7 @@ import { AccessTokenGenerator } from './autenticate/access-token-generator';
 import { RecoverIdToken } from './autenticate/recover-id-token';
 import { JwtStrategyService } from './jwt-strategy/jwt-strategy.service';
 import { TrainingRepository } from 'src/repositories/training.repository';
+import { ScheduleRepository } from 'src/repositories/schedule.repository';
 require('dotenv/config');
 
 @Module({
@@ -30,6 +31,7 @@ require('dotenv/config');
     SignupService,
     PupilRepository,
     TrainingRepository,
+    ScheduleRepository,
     AccessTokenGenerator,
     AccessRepository,
     EncriptorBcrypt,

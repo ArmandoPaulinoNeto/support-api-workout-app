@@ -15,12 +15,8 @@ export class schedule1679946210146 implements MigrationInterface {
                         },
                         {
                             name: "status",
-                            type: "boolean"
-                        },
-                        {
-                            name: "date",
-                            type: "timestamp",
-                            default: "now()"
+                            type: "boolean",
+                            default: true
                         },
                         {
                             name: "training_day",
@@ -32,32 +28,28 @@ export class schedule1679946210146 implements MigrationInterface {
                             type: "uuid"
                         },
                         {
-                            name: "teacher_fk",
+                            name: "scheduled_by",
                             type: "uuid"
+                        },
+                        {
+                            name: "created_at",
+                            type: "timestamp",
+                            default: "now()"
                         }
                     ]
                 }
             ),
             true
         );
-        await queryRunner.createForeignKeys(
+        await queryRunner.createForeignKey(
             "schedule",
-            [
-                new TableForeignKey(
-                    {
-                        columnNames: ["pupil_fk"],
-                        referencedColumnNames: ["id"],
-                        referencedTableName: "pupil"
-                    }
-                ),
-                new TableForeignKey(
-                    {
-                        columnNames: ["teacher_fk"],
-                        referencedColumnNames: ["id"],
-                        referencedTableName: "teacher"
-                    }
-                )               
-            ]
+            new TableForeignKey(
+                {
+                    columnNames: ["pupil_fk"],
+                    referencedColumnNames: ["id"],
+                    referencedTableName: "pupil"
+                }
+            )
         );
     }
 

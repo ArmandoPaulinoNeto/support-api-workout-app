@@ -23,6 +23,9 @@ import { PupilController } from './controllers/pupil/pupil.controller';
 import { PupilService } from './services/pupil/pupil.service';
 import { TrainingRepository } from './repositories/training.repository';
 import { SignupService } from './services/signup/signup.service';
+import { TrainingController } from './controllers/training/training.controller';
+import { TrainingService } from './services/training/administrator.service';
+import { ScheduleRepository } from './repositories/schedule.repository';
 
 @Module({
   imports: [
@@ -61,6 +64,8 @@ import { SignupService } from './services/signup/signup.service';
     PupilService,
     PupilRepository,
     TrainingRepository,
+    TrainingService,
+    ScheduleRepository,
     AccessRepository,
     LoadingDataRepository,
     AccessTokenGenerator,
@@ -70,6 +75,6 @@ import { SignupService } from './services/signup/signup.service';
     RecoverIdToken,
     JwtService
   ],
-  controllers: [AdministratorController, PupilController,SigninController, SigninController, LoadingDataController],
+  controllers: [AdministratorController, PupilController,SigninController, SigninController, LoadingDataController, TrainingController],
 })
 export class AppModule {}

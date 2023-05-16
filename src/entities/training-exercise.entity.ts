@@ -1,6 +1,6 @@
 export class TrainingExercise{
     id: String;
-    repetition: Number;
+    repetitions: Number;
     series: Number;
     weight: Number;
     observation: String;

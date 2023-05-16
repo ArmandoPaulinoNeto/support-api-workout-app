@@ -9,6 +9,7 @@ import { AccessTokenGenerator } from "../auth/autenticate/access-token-generator
 import { RecoverIdToken } from "../auth/autenticate/recover-id-token";
 import { SignupController } from "./signup.controller";
 import { TrainingRepository } from "src/repositories/training.repository";
+import { ScheduleRepository } from "src/repositories/schedule.repository";
 
 @Module({
     imports: [      
@@ -20,6 +21,7 @@ import { TrainingRepository } from "src/repositories/training.repository";
         SignupService,
         PupilRepository,
         TrainingRepository,
+        ScheduleRepository,
         RecoverIdToken,
         AccessRepository,
         AccessTokenGenerator,

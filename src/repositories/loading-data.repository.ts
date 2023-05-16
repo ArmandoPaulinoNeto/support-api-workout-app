@@ -15,18 +15,16 @@ export class LoadingDataRepository{
                                                     .getRawOne();
 
         const pupilNumber = await AppDataSource.createQueryBuilder()
-                                                .select("*")
+                                                .select("COUNT(p.id)")
                                                 .from("pupil", "p")
                                                 .groupBy("p.id")
-                                                .addSelect("COUNT(*)", "c")
-                                                .getRawMany();
-        
+                                                .execute();
+
         const teacherNumber = await AppDataSource.createQueryBuilder()
-                                                    .select("*")
-                                                    .from("teacher", "t")
-                                                    .groupBy("t.id")
-                                                    .addSelect("COUNT(*)", "c")
-                                                    .getRawMany();
+                                                .select("COUNT(t.id)")
+                                                .from("teacher", "t")
+                                                .groupBy("t.id")
+                                                .execute();
         
         let notice = await AppDataSource.createQueryBuilder()
                                             .select("id, image, status")
@@ -34,15 +32,10 @@ export class LoadingDataRepository{
                                             .where("n.status = true")
                                             .getRawOne();
                                             
-        notice = notice != null? notice : new Notice();
-        const nPupils = await this.countRegisters(pupilNumber);
-        const nTeachers = await this.countRegisters(pupilNumber);
+        notice = notice != null ? notice : new Notice();
+        const nPupils = pupilNumber.length ?? 0;
+        const nTeachers = teacherNumber.length ?? 0;
 
         return {administrator, nPupils, nTeachers, notice}                              
-    }
-
-    countRegisters(nEntity){
-        
-        return nEntity != null ? nEntity.filter(number =>(number.c == "1")).length : 0;
     }
 }

@@ -5,6 +5,7 @@ import { JwtGuard } from '../auth/jwt.guard';
 import { RoleUserGuard } from '../auth/role-user/role-user.guard';
 import { Role } from '../auth/role.decorator';
 import { TrainingDto } from 'src/dtos/training.dto';
+import { ScheduleDto } from 'src/dtos/schedule.dto';
 
 @Controller('signup')
 export class SignupController {
@@ -20,8 +21,15 @@ export class SignupController {
 
     @Role("administrator" || "professor")
     @UseGuards(JwtGuard, RoleUserGuard)
-    @Post("/traininig")
+    @Post("/training")
     createTraining(@Body() trainingDto: TrainingDto){
         return this.signupService.createTraining(trainingDto);
+    }
+
+    @Role("administrator" || "professor")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/schedule")
+    createSchedule(@Body() scheduleDto: ScheduleDto){
+        return this.signupService.createSchedule(scheduleDto);
     }
 }
