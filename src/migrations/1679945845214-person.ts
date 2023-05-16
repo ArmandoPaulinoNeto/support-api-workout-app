@@ -23,7 +23,7 @@ export class person1679945845214 implements MigrationInterface {
                             type: "date",                            
                         },
                         {
-                            name: "gender",
+                            name: "sex",
                             type: "varchar",
                             length: "15"
                         },

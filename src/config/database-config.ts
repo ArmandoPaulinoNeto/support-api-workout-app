@@ -1,7 +1,10 @@
 import { DataSourceOptions } from "typeorm";
+import { SeederOptions } from "typeorm-extension";
+import { MainSeeder } from "../seeds/MainSeeder"
 require("dotenv").config();
 
-const databaseConfig: DataSourceOptions = {
+
+const databaseConfig: DataSourceOptions & SeederOptions = {
     name: "default",
     type: "postgres",
     host: process.env.POSTGRES_HOST,
@@ -11,6 +14,7 @@ const databaseConfig: DataSourceOptions = {
     database: process.env.POSTGRES_DATABASE,
     entities: [],
     migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+    seeds: [MainSeeder],
     synchronize: true,
     logging: true,
     migrationsRun: true

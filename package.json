@@ -11,6 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:docker:dev": "npm install && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -24,7 +25,8 @@
     "migration:generate": "yarn run typeorm:cli migration:generate",
     "migration:create": "yarn run typeorm:cli migration:create",
     "migration:run": "yarn run typeorm:cli migration:run",
-    "migration:revert": "yarn run typeorm:cli migration:revert"
+    "migration:revert": "yarn run typeorm:cli migration:revert",
+    "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d src/config/data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -46,6 +48,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.12",
+    "typeorm-extension": "^2.7.0",
     "uuid": "^9.0.0",
     "yarn": "^1.22.19"
   },

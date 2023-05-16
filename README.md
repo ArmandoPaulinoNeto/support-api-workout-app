@@ -1,31 +1,32 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+## Fábrica de Software II
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+### API para de suporte para o projeto Workout-app.
+A API manipula os dados obtidos a partir do App Workout-app.
+O projeto workout-app busca digitalizar o processo de gerenciamento em academias.
+Sendo desenvolvido pela equipe do segundo período de Fábrica de Software II.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Funcionamento da API.
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
+* #### Instruções:
+* * Baixar ou Clonar o repositório;
+* * Subir para um serviço na nuvem ou localmente;
+* * Renomer o arquivo .env.example para .env;
+* * Criar um banco de dados, apenas nomeando-o, pois as tabelas são criadas automaticamente pelo framework Typeorm para Postgres;
+* * Preencher o arquivo .env com as credenciais da máquina e do banco de dados que será utilizado pela à API.
+* * * POSTGRES_USER=postgres
+* * * POSTGRES_DATABASE=postgres
+* #### Comandos:
+* * docker-compose up -d
+* * * comando para criar, e iniciá-los no docker.
+* * npm run seed
+* * * * comando para inserir dodos padrões para o app.
+### :computer: Tecnologias utilizadas:
+<br/>
+<code><img width="10%" src="https://www.vectorlogo.zone/logos/nestjs/nestjs-ar21.svg">&nbsp;&nbsp;<img width="10%" src="https://www.vectorlogo.zone/logos/typescriptlang/typescriptlang-ar21.svg">&nbsp;&nbsp;<img width="10%" src="https://www.vectorlogo.zone/logos/postgresql/postgresql-ar21.svg"></code>
+<br/>
+<br/>
+<code><img width="10%" src="https://www.vectorlogo.zone/logos/visualstudio_code/visualstudio_code-ar21.svg">&nbsp;&nbsp;<img width="10%" src="https://www.vectorlogo.zone/logos/docker/docker-ar21.svg">&nbsp;&nbsp;<img width="10%" src="https://www.vectorlogo.zone/logos/nodejs/nodejs-ar21.svg">&nbsp;&nbsp;<img width="10%" src="https://www.vectorlogo.zone/logos/json/json-ar21.svg"></code>
+<br/>
 ## Installation
 
 ```bash
@@ -36,13 +37,8 @@ $ npm install
 
 ```bash
 # development
-$ npm run start
+$ npm start dev
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
 ## Test
@@ -57,17 +53,3 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

@@ -1,5 +1,5 @@
-export class Pupil{
+export class Teacher{
     id: String;
-    goal: String;
+    cref: String;
     person_fk: String;    
 }

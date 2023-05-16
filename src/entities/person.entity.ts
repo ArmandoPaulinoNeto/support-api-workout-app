@@ -1,7 +1,7 @@
 export class Person{
-    id: string;
-    name: string;
+    id: String;
+    name: String;
     birthday: Date;
-    gender: string;
-    access_fk: string;
+    sex: String;
+    access_fk: String;
 }

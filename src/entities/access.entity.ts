@@ -1,7 +1,6 @@
-export class Access{
-    
-    id: string;
-    email: string;
-    password: string;
-    profile_fk: string;
+export class Access{    
+    id: String;
+    email: String;
+    password: String;
+    profile_fk: String;
 }

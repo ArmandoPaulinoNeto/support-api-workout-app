@@ -12,19 +12,16 @@ export class notice1680379080197 implements MigrationInterface {
                             name: "id",
                             type: "uuid",
                             isPrimary: true
-                        },
-                        {
-                            name: "title",
-                            type: "varchar",
-                            length: "25",
-                        },
-                        {
-                            name: "description",
-                            type: "varchar"
-                        },
+                        },                        
                         {
                             name: "image",
-                            type: "varchar"
+                            type: "varchar",
+                            isNullable: false
+                        },
+                        {
+                            name: "status",
+                            type: "boolean",
+                            isNullable: false
                         },
                         {
                             name: "administrator_fk",
