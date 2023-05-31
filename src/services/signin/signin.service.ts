@@ -11,8 +11,4 @@ export class SigninService {
 
         return this.accessRepository.signinPerson(signinAuthDto);
     }
-
-    getUserById(userId: String) {
-        throw new Error('Method not implemented.');
-    }
 }

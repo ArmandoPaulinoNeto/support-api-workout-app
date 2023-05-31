@@ -1,7 +1,7 @@
 import { type } from "os";
 import { Column, MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
-export class administrator1680379024906 implements MigrationInterface {
+export class administrator1680379080197 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -26,7 +26,8 @@ export class administrator1680379024906 implements MigrationInterface {
                         }
                     ]
                 }
-            )
+            ),
+            true
         );
         await queryRunner.createForeignKey(
             "administrator",

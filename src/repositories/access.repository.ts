@@ -39,19 +39,35 @@ export class AccessRepository{
 
         try{
             const access = await AppDataSource.createQueryBuilder()
-                                                .select("a.email, a.password, p.role, aa.id")
+                                                .select("a.email, a.password, p.role, a.id")
                                                 .from("access", "a")
-                                                .innerJoinAndSelect("profile", "p", "p.id = a.profile_fk")
-                                                .innerJoinAndSelect("administrator", "aa", "aa.access_fk = a.id")
+                                                .innerJoin("profile", "p", "p.id = a.profile_fk")
                                                 .where("a.email = :email", { email: email })
-                                                .execute();
+                                                .getRawOne();
             
             if(JSON.stringify(access) != '{}' && JSON.stringify(access) != '[]'){
                 
-                if(await this.encriptorBcrypt.comparePasswordWithHash(password, access[0].password)){
-                    var sub = access[0].id;
-                    var accessEmail = access[0].email;
-                    var role = access[0].role;
+                if(await this.encriptorBcrypt.comparePasswordWithHash(password, access.password)){
+                    var logged;
+                    if(access.role == "administrator"){
+                        logged = await AppDataSource.createQueryBuilder()
+                                                        .select("a.id")
+                                                        .from("access", "ac")
+                                                        .innerJoin("administrator", "a", "a.access_fk = ac.id")
+                                                        .where("ac.id = :id", { id: access.id })
+                                                        .getRawOne();
+                    }else{
+                        logged = await AppDataSource.createQueryBuilder()
+                                                        .select("r.id")
+                                                        .from("access", "ac")
+                                                        .innerJoin("person", "p", "p.access_fk = ac.id")
+                                                        .innerJoin(access.role, "r", "r.person_fk = p.id")
+                                                        .where("ac.id = :id", { id: access.id })
+                                                        .getRawOne();
+                    }
+                    var sub = logged.id;
+                    var accessEmail = access.email;
+                    var role = access.role;
                     var exp = "3600s";
                     
                     return this.accessTokenGenerator.AccessToken(sub, accessEmail, role, exp);

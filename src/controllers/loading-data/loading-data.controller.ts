@@ -5,15 +5,29 @@ import { JwtGuard } from "../auth/jwt.guard";
 import { RoleUserGuard } from "../auth/role-user/role-user.guard";
 import { Role } from "../auth/role.decorator";
 
-@Controller("loading")
+@Controller("loading-data")
 export class LoadingDataController{
 
     constructor(private loadingDataRepository: LoadingDataRepository){}
     
-    @Role("administrator" || "teacher")
+    @Role("administrator")
     @UseGuards(JwtGuard, RoleUserGuard)
-    @Post("/data")
-    getDataHome(@Body() loggedDto: LoggedDto){
-        return this.loadingDataRepository.getDataHome(loggedDto);
+    @Post("/administrator")
+    getDataHomeAdministrator(@Body() loggedDto: LoggedDto){
+        return this.loadingDataRepository.getDataHomeAdministrator(loggedDto);
+    }
+
+    @Role("teacher")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/teacher")
+    getDataHomeTeacher(@Body() loggedDto: LoggedDto){
+        return this.loadingDataRepository.getDataHomeTeacher(loggedDto);
+    }
+
+    @Role("pupil")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/pupil")
+    getDataHomePupil(@Body() loggedDto: LoggedDto){
+        return this.loadingDataRepository.getDataHomePupil(loggedDto);
     }
 }

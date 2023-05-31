@@ -3,5 +3,6 @@ export class Schedule{
     status: boolean;
     training_day;
     pupil_fk: String;
+    training_fk: String;
     scheduled_by: String;
 }
