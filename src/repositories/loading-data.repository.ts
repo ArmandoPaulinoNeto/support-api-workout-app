@@ -39,8 +39,32 @@ export class LoadingDataRepository{
         return {administrator, nPupils, nTeachers, notice}                              
     }
     
-    getDataHomeTeacher(loggedDto: LoggedDto) {
-        throw new Error("Method not implemented.");
+    async getDataHomeTeacher(loggedDto: LoggedDto) {
+        const { id } = loggedDto;
+
+        const teacher = await AppDataSource.createQueryBuilder()
+                                            .select("t.cref, t.person_fk, p.name")
+                                            .from("teacher", "t")
+                                            .leftJoin("person", "p", "p.id = t.person_fk")
+                                            .where("t.id = :id", {id: id})
+                                            .getRawOne();
+
+        const pupilNumber = await AppDataSource.createQueryBuilder()
+                                                .select("COUNT(p.id)")
+                                                .from("pupil", "p")
+                                                .groupBy("p.id")
+                                                .execute();
+
+        let notice = await AppDataSource.createQueryBuilder()
+                                        .select("id, image, status")
+                                        .from("notice", "n")
+                                        .where("n.status = true")
+                                        .getRawOne();
+        
+        notice = notice != null ? notice : new Notice();
+        const nPupils = pupilNumber.length ?? 0;
+        
+        return {teacher, nPupils, notice} 
     }
 
     async getDataHomePupil(loggedDto: LoggedDto) {

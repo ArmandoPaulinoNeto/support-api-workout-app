@@ -2,36 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { AppDataSource } from "src/config/data-source";
 import { AccessTokenGenerator } from "src/controllers/auth/autenticate/access-token-generator";
 import { SigninAuthDto } from "src/dtos/signin-auth.dto";
-import { v4 } from "uuid";
 import { EncriptorBcrypt } from "src/util/encriptor-bcrypt";
-import { Access } from "src/entities/access.entity";
-import { AccessDto } from "src/dtos/access.dto";
 
 require("dotenv/config");
 @Injectable()
 export class AccessRepository{
     
     constructor(private accessTokenGenerator: AccessTokenGenerator, private encriptorBcrypt: EncriptorBcrypt){}
-
-    async createUser(accessDto: AccessDto): Promise<Access>{        
-       
-        const { profile, email, password } = accessDto;
-        
-        const newAccess = new Access();
-
-        newAccess.id = v4();
-        newAccess.email = email;
-        newAccess.password = await this.encriptorBcrypt.generatorHash(password);        
-        newAccess.profile_fk = profile.id;
-
-        AppDataSource.createQueryBuilder()
-                        .insert()
-                        .into("access")
-                        .values(newAccess)
-                        .execute();
-                        
-        return newAccess;
-    }
 
     async signinPerson(signupAuthDto: SigninAuthDto): Promise<String>{
         

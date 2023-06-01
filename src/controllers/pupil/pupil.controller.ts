@@ -47,7 +47,7 @@ export class PupilController {
         return this.pupilService.fetchAllAssementPupilById(pupilDto);
     }
 
-    @Role("administrator" || "teacher")
+    @Role("administrator" || "pupil")
     @UseGuards(JwtGuard, RoleUserGuard)
     @Post("/find-by-id")
     findById(@Body() pupilDto: PupilDto){
