@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { AppDataSource } from "src/config/data-source";
 import { DataPupilDto } from "src/dtos/data-pupil.dto";
 import { PupilDto } from "src/dtos/pupil.dto";
+import { ScheduleDto } from "src/dtos/schedule.dto";
+import { TrainingExerciseDto } from "src/dtos/training-exercise.dto";
 import { Access } from "src/entities/access.entity";
 import { Person } from "src/entities/person.entity";
 import { Profile } from "src/entities/profile.entity";
@@ -14,10 +16,10 @@ import { v4 } from "uuid";
 export class PupilRepository{
     
     async createPupil(pupilDto: DataPupilDto): Promise<Pupil> {
-                      
+        
         const { goal, name, birthday, sex, email, password, photo, role } = pupilDto;
-
-
+        
+        
         const newProfile = new Profile;
         newProfile.id = v4();
         newProfile.role = role;
@@ -47,8 +49,8 @@ export class PupilRepository{
 
         try {            
             await queryRunner.manager.createQueryBuilder()
-                                .insert()
-                                .into("profile")
+            .insert()
+            .into("profile")
                                 .values(newProfile)
                                 .execute();
 
@@ -69,7 +71,7 @@ export class PupilRepository{
                                 .into("pupil")
                                 .values(newPupil)
                                 .execute();
-            
+                                
             await queryRunner.commitTransaction();
             return newPupil;
         } 
@@ -79,7 +81,7 @@ export class PupilRepository{
             throw "Erro ao tentar salvar os dados do aluno."
         }        
     }
-
+                        
     findById(pupilDto: PupilDto) {
         const { id } = pupilDto
         
@@ -92,37 +94,78 @@ export class PupilRepository{
                             .where("p.id = :id", { id: id })
                             .getRawOne();
     }
-    
+                        
     fetchAllPupil() {
         return AppDataSource.createQueryBuilder()
-                            .select("p.id, ps.name")
+                            .select("p.id, ps.name, ps.birthday, ps.sex")
                             .from("pupil", "p")
                             .innerJoin("person", "ps","ps.id = p.person_fk")
                             .execute();
     }
-
-    fetchAllPupilSchedule() {
+                        
+    async fetchAllSchedulePupilById(pupilDto: PupilDto) {
+        
+        const { id } = pupilDto;
+        
         return AppDataSource.createQueryBuilder()
-                            .select("p.id, ps.name, t.name as last_training")
+                            .select("s.id, s.training_day, t.name as name_training")
                             .from("pupil", "p")
-                            .innerJoin("person", "ps","ps.id = p.person_fk")
                             .leftJoin("schedule", "s", "s.pupil_fk = p.id")
-                            .leftJoin("training_exercise", "te","te.schedule_fk = s.id")
-                            .leftJoin("training","t", "te.training_fk = t.id")
-                            .execute();
+                            .leftJoin("training","t", "t.id = s.training_fk")
+                            .where("p.id = :id", { id: id })
+                            .andWhere("s.status = true")
+                            .execute();        
     }
 
+    findByScheduleId(scheduleDto: ScheduleDto) {
+
+        const { id } = scheduleDto;
+
+        return AppDataSource.createQueryBuilder()
+                            .select("s.training_day, t.name as name_training, te.id as training_exercise_id, te.repetitions, te.series, te.weight, te.observation, e.name as e_name, e.muscle_group")
+                            .from("schedule", "s")
+                            .leftJoin("training","t", "t.id = s.training_fk")
+                            .leftJoin("training_exercise","te", "te.schedule_fk = s.id")
+                            .leftJoin("exercise","e", "e.id = te.exercise_fk")
+                            .where("s.id = :id", { id: id })
+                            .execute();
+    }
+    
+    updateWeightExercise(trainingExerciseDto: TrainingExerciseDto) {
+        const { id, weight } = trainingExerciseDto;
+        var newWeight = {weight: weight};
+        try {            
+            return AppDataSource.createQueryBuilder()
+                                .update("training_exercise")
+                                .set(newWeight)
+                                .where("id = :id", {id: id})
+                                .execute();
+        } 
+        catch (error) {           
+            throw "Erro ao tentar atualizar o exercício!."
+        } 
+    }
+    
+    fetchAllAssementByPupilId(pupilDto: PupilDto) {
+        
+        const { id } = pupilDto;
+        
+        return AppDataSource.createQueryBuilder()
+                            .select("*")
+                            .from("assessment", "a")
+                            .where("a.pupil_fk = :id", { id: id })
+                            .execute();     
+    }
+    
     async updatePupil(pupilDto: PupilDto): Promise<any> {
                       
-        const { id, goal, person_fk, name, birthday, sex, access_fk, email, password, profile_fk, photo, role } = pupilDto;
+        const { goal, person_fk, name, birthday, sex, access_fk, email, password, profile_fk, photo } = pupilDto;
 
         const newProfile = new Profile;
         newProfile.photo = photo;
 
         const newAccess = new Access();
         newAccess.email = email;
-        console.log(password);
-        console.log(password.includes("$2b$10"));
         newAccess.password = password.includes("$2b$10") ? password :  await new EncriptorBcrypt().generatorHash(password);
 
         const newPerson = new Person();
@@ -141,7 +184,7 @@ export class PupilRepository{
             await queryRunner.manager.createQueryBuilder()
                                 .update("pupil")
                                 .set(newPupil)
-                                .where("id = :id", {id: id})
+                                .where("person_fk = :id", {id: person_fk})
                                 .execute();
 
             await queryRunner.manager.createQueryBuilder()
@@ -177,19 +220,46 @@ export class PupilRepository{
         const { id } = pupilDto;
 
         var pupil = await AppDataSource.createQueryBuilder()
-                                        .select("p.person_fk, ps.access_fk, a.profile_fk")
+                                        .select("p.person_fk, ps.access_fk, a.profile_fk, a.id")
                                         .from("pupil", "p")
-                                        .leftJoinAndSelect("person", "ps","ps.id = p.person_fk")
-                                        .leftJoinAndSelect("access", "a","a.id = ps.access_fk")
-                                        .leftJoinAndSelect("profile", "pf","pf.id = a.profile_fk")
+                                        .leftJoin("person", "ps","ps.id = p.person_fk")
+                                        .leftJoin("access", "a","a.id = ps.access_fk")
+                                        .leftJoin("profile", "pf","pf.id = a.profile_fk")
                                         .where("p.id = :id", { id: id })
                                         .getRawOne();
 
+        var schedule = await AppDataSource.createQueryBuilder()
+                                            .select("s.id")
+                                            .from("schedule", "s")
+                                            .where("s.pupil_fk = :id", { id: id })
+                                            .execute();
+                                            
         const queryRunner = AppDataSource.createQueryRunner();
 
         await queryRunner.startTransaction();
 
         try {            
+
+            await queryRunner.manager.createQueryBuilder()
+                                .delete()
+                                .from("assessment")
+                                .where("pupil_fk = :id", {id: id})
+                                .execute();
+
+            for (var i = 0; i < schedule.length; i++) {
+                
+                await queryRunner.manager.createQueryBuilder()
+                                .delete()
+                                .from("training_exercise")
+                                .where("schedule_fk = :id", {id: schedule[i].id})
+                                .execute();
+                await queryRunner.manager.createQueryBuilder()
+                                .delete()
+                                .from("schedule")
+                                .where("id = :id", {id: schedule[i].id})
+                                .execute();
+            }
+                             
             await queryRunner.manager.createQueryBuilder()
                                 .delete()
                                 .from("pupil")

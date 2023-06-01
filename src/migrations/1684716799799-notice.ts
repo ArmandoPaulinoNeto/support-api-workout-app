@@ -1,40 +1,31 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
-export class schedule1679946210146 implements MigrationInterface {
+export class notice1684716799799 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "schedule",
+                    name: "notice",
                     columns: [
                         {
                             name: "id",
                             type: "uuid",
                             isPrimary: true
+                        },                        
+                        {
+                            name: "image",
+                            type: "varchar",
+                            isNullable: false
                         },
                         {
                             name: "status",
                             type: "boolean",
-                            default: true
+                            isNullable: false
                         },
                         {
-                            name: "training_day",
-                            type: "varchar",
-                            length: "15"
-                        },
-                        {
-                            name: "pupil_fk",
+                            name: "administrator_fk",
                             type: "uuid"
-                        },
-                        {
-                            name: "scheduled_by",
-                            type: "uuid"
-                        },
-                        {
-                            name: "created_at",
-                            type: "timestamp",
-                            default: "now()"
                         }
                     ]
                 }
@@ -42,19 +33,19 @@ export class schedule1679946210146 implements MigrationInterface {
             true
         );
         await queryRunner.createForeignKey(
-            "schedule",
+            "notice",
             new TableForeignKey(
                 {
-                    columnNames: ["pupil_fk"],
+                    columnNames:["administrator_fk"],
                     referencedColumnNames: ["id"],
-                    referencedTableName: "pupil"
+                    referencedTableName: "administrator"
                 }
             )
         );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("schedule");
+        await queryRunner.dropTable("notice")
     }
 
 }

@@ -21,32 +21,33 @@ export class ScheduleRepository{
 
             newSchedule.id = v4();
             newSchedule.pupil_fk = pupilFK;
+            newSchedule.training_fk = trainingFK;
             newSchedule.training_day = trainingDay;
             newSchedule.scheduled_by = scheduledBy;
 
             await queryRunner.manager.createQueryBuilder()
-                                    .insert()
-                                    .into("schedule")
-                                    .values(newSchedule)
-                                    .execute();
-            
+                                        .insert()
+                                        .into("schedule")
+                                        .values(newSchedule)
+                                        .execute();
+
+                                        
             for(var i =0; i < exercisesFK.length; i++) {
-    
-                const newTraining = new TrainingExercise();
-                newTraining.id = v4();
-                newTraining.repetitions = parseInt(repetitions[i].toString());
-                newTraining.series = parseInt(series[i].toString());
-                newTraining.weight = parseInt(weight[i].toString());
-                newTraining.observation = observations[i];
-                newTraining.training_fk = trainingFK;
-                newTraining.exercise_fk = exercisesFK[i];
-                newTraining.schedule_fk = newSchedule.id;
+                                
+                const newTrainingExercise = new TrainingExercise;
+                newTrainingExercise.id = v4();
+                newTrainingExercise.repetitions = parseInt(repetitions[i].toString());
+                newTrainingExercise.series = parseInt(series[i].toString());
+                newTrainingExercise.weight = parseInt(weight[i].toString());
+                newTrainingExercise.observation = observations[i];
+                newTrainingExercise.exercise_fk = exercisesFK[i];                
+                newTrainingExercise.schedule_fk = newSchedule.id;
                 
                 await queryRunner.manager.createQueryBuilder()
-                                    .insert()
-                                    .into("training_exercise")
-                                    .values(newTraining)
-                                    .execute();
+                                            .insert()
+                                            .into("training_exercise")
+                                            .values(newTrainingExercise)
+                                            .execute();
             }
             await queryRunner.commitTransaction();
             return newSchedule.id;
@@ -56,16 +57,5 @@ export class ScheduleRepository{
             console.log(error);
                 throw "Erro ao tentar salvar os dados do agendamento do treino!"
         }        
-    }
-
-    fetchAllSchedule() {
-        return AppDataSource.createQueryBuilder()
-                            .select("p.id, ps.name, t.name as last_training")
-                            .from("pupil", "p")
-                            .innerJoin("person", "ps","ps.id = p.person_fk")
-                            .leftJoin("schedule", "s", "s.pupil_fk = p.id")
-                            .leftJoin("training_exercise", "te","te.schedule_fk = s.id")
-                            .leftJoin("training","t", "te.training_fk = t.id")
-                            .execute();
     }
 }

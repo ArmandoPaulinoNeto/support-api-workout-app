@@ -7,6 +7,7 @@ import { RoleUserGuard } from '../auth/role-user/role-user.guard';
 import { Role } from '../auth/role.decorator';
 import { DataTeacherDto } from 'src/dtos/data-teacher.dto';
 import { ExerciseDto } from 'src/dtos/exercise.dto';
+import { AssessmentDto } from 'src/dtos/assessment.dto';
 
 @Controller('administrator')
 export class AdministratorController {
@@ -47,5 +48,12 @@ export class AdministratorController {
     createNotice(@Body() noticeDto: NoticeDto, @Req() req: Request){
         noticeDto.administratorFK = this.recoverIdToken.recoverUserIdByAccessToken(req);
         return this.administratorService.createNotice(noticeDto);
+    }
+
+    @Role("administrator")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/signup/assessment")
+    createAssessment(@Body() assessmentDto: AssessmentDto){        
+        return this.administratorService.createAssessment(assessmentDto);
     }
 }

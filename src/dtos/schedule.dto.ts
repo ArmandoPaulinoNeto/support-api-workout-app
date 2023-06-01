@@ -1,13 +1,15 @@
 import { Exercise } from "src/entities/exercise.entity";
 
 export class ScheduleDto{
+    id: String;
     status: boolean;
     pupilFK: String;
-    trainingDay: Date;    
+    trainingDay: String;    
     scheduledBy: String;
     observations: String[];
     trainingFK: String;
-    exercisesFK: string[];
+    trainingExerciseId: String;
+    exercisesFK: String[];
     repetitions: String[];
     series: String[];
     weight: String[];
