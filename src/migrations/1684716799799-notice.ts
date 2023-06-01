@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
-export class notice1680379080197 implements MigrationInterface {
+export class notice1684716799799 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
@@ -12,19 +12,16 @@ export class notice1680379080197 implements MigrationInterface {
                             name: "id",
                             type: "uuid",
                             isPrimary: true
-                        },
-                        {
-                            name: "title",
-                            type: "varchar",
-                            length: "25",
-                        },
-                        {
-                            name: "description",
-                            type: "varchar"
-                        },
+                        },                        
                         {
                             name: "image",
-                            type: "varchar"
+                            type: "varchar",
+                            isNullable: false
+                        },
+                        {
+                            name: "status",
+                            type: "boolean",
+                            isNullable: false
                         },
                         {
                             name: "administrator_fk",
@@ -32,7 +29,8 @@ export class notice1680379080197 implements MigrationInterface {
                         }
                     ]
                 }
-            )
+            ),
+            true
         );
         await queryRunner.createForeignKey(
             "notice",

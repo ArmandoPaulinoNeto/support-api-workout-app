@@ -1,5 +1,5 @@
 export class Profile{
-    id: string;
-    role: string;
-    photo: string;
+    id: String;
+    role: String;
+    photo: String;
 }

@@ -1,22 +1,35 @@
-import { Body, Controller, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { AccessDto } from 'src/dtos/access.dto';
-import { PupilDto } from 'src/dtos/pupil.dto';
-import { PupilRepository } from 'src/repositories/pupil.repository';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { DataPupilDto } from 'src/dtos/data-pupil.dto';
 import { SignupService } from 'src/services/signup/signup.service';
-import { RecoverIdToken } from '../auth/autenticate/recover-id-token';
 import { JwtGuard } from '../auth/jwt.guard';
 import { RoleUserGuard } from '../auth/role-user/role-user.guard';
 import { Role } from '../auth/role.decorator';
+import { TrainingDto } from 'src/dtos/training.dto';
+import { ScheduleDto } from 'src/dtos/schedule.dto';
 
 @Controller('signup')
 export class SignupController {
    
     constructor(private signupService: SignupService){}
-    
+
     @Role("administrator" || "professor")
     @UseGuards(JwtGuard, RoleUserGuard)
     @Post("/pupil")
-    createPupil(@Body() pupilDto: PupilDto){
-        return this.signupService.createPupil(pupilDto);
+    createPupil(@Body() dataPupilDto: DataPupilDto){
+        return this.signupService.createPupil(dataPupilDto);
+    }
+
+    @Role("administrator" || "professor")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/training")
+    createTraining(@Body() trainingDto: TrainingDto){
+        return this.signupService.createTraining(trainingDto);
+    }
+
+    @Role("administrator" || "professor")
+    @UseGuards(JwtGuard, RoleUserGuard)
+    @Post("/schedule")
+    createSchedule(@Body() scheduleDto: ScheduleDto){
+        return this.signupService.createSchedule(scheduleDto);
     }
 }

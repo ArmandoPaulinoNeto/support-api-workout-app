@@ -1,0 +1,43 @@
+version: '2.0'
+
+networks:
+  container_net:
+    driver: bridge
+
+services:
+# setting auth-app api
+  api: 
+    container_name: auth-app_sevice
+    networks:
+      - container_net
+    env_file:
+      - .env
+    environment:
+      - API_ENVIRONMENT=container
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+
+    build: .
+    ports:
+      - ${API_PORT_LOCAL}:${API_PORT_CONTAINER}
+    volumes:
+      - .:/home/projects/auth-app
+    depends_on:
+      - database
+# setting database postgres
+  database:
+    container_name: postgres_service
+    networks:
+      - container_net
+    image: postgres
+    env_file:
+      - .env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST=database
+    ports:
+      - ${POSTGRES_PORT}:5432
+volumes:
+  postgres:
+    driver: local

@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
-export class trainingExercise1679967319508 implements MigrationInterface {
+export class schedule1679946302435 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.createTable(
+        await queryRunner.createTable(
             new Table(
                 {
-                    name: "training_exercise",
+                    name: "schedule",
                     columns: [
                         {
                             name: "id",
@@ -14,32 +14,31 @@ export class trainingExercise1679967319508 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "repetitions",
-                            type: "numeric"
+                            name: "status",
+                            type: "boolean",
+                            default: true
                         },
                         {
-                            name: "series",
-                            type: "numeric"
-                        },                        
-                        {
-                            name: "weight",
-                            type: "numeric"
-                        },
-                        {
-                            name: "observation",
+                            name: "training_day",
                             type: "varchar",
+                            length: "15"
+                        },
+                        {
+                            name: "pupil_fk",
+                            type: "uuid"
                         },
                         {
                             name: "training_fk",
                             type: "uuid"
                         },
                         {
-                            name: "exercise_fk",
+                            name: "scheduled_by",
                             type: "uuid"
                         },
                         {
-                            name: "schedule_fk",
-                            type: "uuid"
+                            name: "created_at",
+                            type: "timestamp",
+                            default: "now()"
                         }
                     ]
                 }
@@ -47,27 +46,20 @@ export class trainingExercise1679967319508 implements MigrationInterface {
             true
         );
         await queryRunner.createForeignKeys(
-            "training_exercise",
+            "schedule",
             [
+                new TableForeignKey(
+                    {
+                        columnNames: ["pupil_fk"],
+                        referencedColumnNames: ["id"],
+                        referencedTableName: "pupil"
+                    }
+                ),
                 new TableForeignKey(
                     {
                         columnNames: ["training_fk"],
                         referencedColumnNames: ["id"],
                         referencedTableName: "training"
-                    }
-                ),
-                new TableForeignKey(
-                    {
-                        columnNames: ["exercise_fk"],
-                        referencedColumnNames: ["id"],
-                        referencedTableName: "exercise"
-                    }
-                ),
-                new TableForeignKey(
-                    {
-                        columnNames: ["schedule_fk"],
-                        referencedColumnNames: ["id"],
-                        referencedTableName: "schedule"
                     }
                 )
             ]
@@ -75,7 +67,7 @@ export class trainingExercise1679967319508 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("training_exercise");
+        await queryRunner.dropTable("schedule");
     }
 
 }
